@@ -173,6 +173,8 @@ $pdo->exec("UPDATE transactions SET status='overdue' WHERE due_date < date('now'
 
 // ── DATA ────────────────────────────────────────────────
 $flash=$_SESSION['flash']??null; unset($_SESSION['flash']);
+// Avoid: Undefined variable $net (e.g., when page != dashboard)
+$net = 0;
 if($logged_in){
     $contacts = $pdo->query("SELECT * FROM contacts ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
     $txns     = $pdo->query("SELECT t.*,c.name as cname,c.phone as cphone FROM transactions t JOIN contacts c ON t.contact_id=c.id ORDER BY t.created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
@@ -197,7 +199,7 @@ if($logged_in){
 }
 ?>
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="<?= htmlspecialchars($_SESSION['lang'] ?? 'hi') ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
